@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>八卦社</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .news-item {
+            background: white;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .news-title {
+            cursor: pointer;
+            position: relative;
+            padding-right: 20px;
+        }
+        .news-title::after {
+            content: '▼';
+            position: absolute;
+            right: 0;
+            transition: transform 0.3s;
+        }
+        .news-title.open::after {
+            transform: rotate(180deg);
+        }
+        .news-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .news-content.show {
+            max-height: 1000px;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>八卦社</h1>
+        <p>最狒的八卦新闻</p>
+    </header>
+
+    <div class="container" id="news-container">
+        <!-- 新闻内容将通过JavaScript动态加载 -->
+    </div>
+
+    <script>
+        fetch('news.xaml')
+            .then(response => response.text())
+            .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+            .then(data => {
+                const container = document.getElementById('news-container');
+                const items = data.querySelectorAll('item');
+                
+                items.forEach(item => {
+                    const title = item.querySelector('title').textContent;
+                    const content = item.querySelector('content').textContent;
+                    
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    const newsId = items.length - Array.from(items).indexOf(item);
+                    newsItem.innerHTML = `
+                        <h2 class="news-title" data-id="${newsId}">${title}</h2>
+                        <div class="news-content" style="display:none;">${content}</div>
+                    `;
+                    
+                    newsItem.querySelector('.news-title').addEventListener('click', function() {
+                        const newsId = this.dataset.id === '2' ? '4' : this.dataset.id;
+                        window.location.href = `${newsId}.html`;
+                        const contentDiv = this.nextElementSibling;
+                        this.classList.toggle('open');
+                        contentDiv.classList.toggle('show');
+                    });
+                    
+                    container.appendChild(newsItem);
+                });
+            })
+            .catch(error => console.error('加载新闻出错:', error));
+    </script>
+
+    <footer>
+        <p>© 2025 八卦社 版权所有</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<news>
+  <item>
+    <title>今日头条</title>
+    <content>这里是今日最热门的狒狒新闻...</content>
+  </item>
+  <item>
+    <title>班级动态</title>
+    <content>这里是班级最新动态... <a href="3.html">点击查看朱将军系列：旺仔牛奶事件</a></content>
+  </item>
+  <item>
+    <title>deepseek大战ChatGPT</title>
+    <content>AI最新战况：deepseek大战ChatGPT... <a href="4.html">点击查看详情</a></content>
+  </item>
+</news>
